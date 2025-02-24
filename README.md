@@ -5,7 +5,7 @@ This repository demonstrates how to combine a Transformer model with MC-Dropout 
 ## Folder Structure
 
 ```
-uncertainty/
+JoLab-uncertainty/
 ├── README.md
 ├── requirements.txt
 ├── data/
@@ -54,4 +54,4 @@ It will create outputs in the `result/` folder, such as:
 - `_cv_alpha_AUC_plot.pdf`: fold-wise alpha vs AUC line plot
 
 ## License
-Taeho Jo (tjo@iu.edu)
+JoLab (https://www.jolab.ai)
