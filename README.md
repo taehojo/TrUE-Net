@@ -4,19 +4,7 @@ This repository demonstrates how to combine a Transformer model with MC-Dropout 
 
 ## Folder Structure
 
-snp-mc-rf/
-├── README.md
-├── requirements.txt
-├── data/
-│   ├── APOE_50kb-1050.raw
-│   └── DX-1050.txt
-├── src/
-│   ├── dataset.py
-│   ├── model.py
-│   ├── training.py
-│   ├── evaluation.py
-│   └── main.py
-└── result/
+<pre lang="md"> ``` uncertainty/ ├── README.md ├── requirements.txt ├── data/ │ ├── APOE_50kb-1050.raw │ └── DX-1050.txt ├── src/ │ ├── dataset.py │ ├── model.py │ ├── training.py │ ├── evaluation.py │ └── main.py └── result/ ``` </pre>
 
 - `dataset.py`: dataset utilities (`load_data`, `split_into_windows_as_sequence`, `SequenceSNPDataset`)
 - `model.py`: `TransformerClassifier` with MC-Dropout
@@ -53,5 +41,4 @@ It will create outputs in the `result/` folder, such as:
 - `_cv_alpha_AUC_plot.pdf`: fold-wise alpha vs AUC line plot
 
 ## License
-
-Choose a license such as MIT or Apache 2.0 and include the file in your repo.
+Taeho Jo (tjo@iu.edu)
