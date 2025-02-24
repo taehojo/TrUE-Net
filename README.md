@@ -4,8 +4,21 @@ This repository demonstrates how to combine a Transformer model with MC-Dropout 
 
 ## Folder Structure
 
-<pre lang="md"> ``` uncertainty/ ├── README.md ├── requirements.txt ├── data/ │ ├── APOE_50kb-1050.raw │ └── DX-1050.txt ├── src/ │ ├── dataset.py │ ├── model.py │ ├── training.py │ ├── evaluation.py │ └── main.py └── result/ ``` </pre>
-
+```
+uncertainty/
+├── README.md
+├── requirements.txt
+├── data/
+│   ├── APOE_50kb-1050.raw
+│   └── DX-1050.txt
+├── src/
+│   ├── dataset.py
+│   ├── model.py
+│   ├── training.py
+│   ├── evaluation.py
+│   └── main.py
+└── result/
+```
 - `dataset.py`: dataset utilities (`load_data`, `split_into_windows_as_sequence`, `SequenceSNPDataset`)
 - `model.py`: `TransformerClassifier` with MC-Dropout
 - `training.py`: functions to train/evaluate MC-Dropout
