@@ -54,4 +54,7 @@ It will create outputs in the `result/` folder, such as:
 - `_cv_alpha_AUC_plot.pdf`: fold-wise alpha vs AUC line plot
 
 ## License
-JoLab (https://www.jolab.ai)
+This code is maintained by the **Taeho Jo Research Group** at [Indiana University School of Medicine](https://medicine.iu.edu).  
+For more information, visit our lab website: [JoLab.AI](https://www.jolab.ai).
+
+This repository is provided under the [MIT License](LICENSE).  

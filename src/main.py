@@ -3,8 +3,6 @@ import sys
 import numpy as np
 import pandas as pd
 import torch
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 from sklearn.model_selection import StratifiedKFold, train_test_split
 from sklearn.ensemble import RandomForestClassifier
@@ -17,7 +15,7 @@ from model import TransformerClassifier
 from training import train_model_mc, evaluate_model_mc
 from evaluation import (calc_basic_metrics, confusion_detail, get_subgroup_metrics,
                         get_alpha_score_AUC, get_threshold_score,
-                        make_plots_for_cv_alpha, make_plots_for_test)
+                        make_plots_for_test)
 
 def main():
     if len(sys.argv) != 4:
@@ -55,9 +53,8 @@ def main():
     oof_labels  = np.array(y_train, copy=True)
 
     alpha_candidates = np.linspace(0, 1, 6)
-    alpha_scores_list = []
-    fold_id = 0
 
+    fold_id = 0
     for tr_idx, val_idx in skf.split(X_3d_train, y_train):
         fold_id += 1
         print(f"\n[Fold {fold_id}] train={len(tr_idx)} val={len(val_idx)}")
@@ -95,24 +92,6 @@ def main():
         oof_probs_rf[val_idx]= rf_probs_val
         oof_vars_rf[val_idx] = rf_vars_val
 
-        row_score = {"fold":fold_id}
-        arr_labels_val = np.array(labels_val_t)
-        for a in alpha_candidates:
-            p_tmp = a*probs_val_t + (1-a)*rf_probs_val
-            if len(np.unique(arr_labels_val))<2:
-                auc_ = 0.5
-            else:
-                auc_ = roc_auc_score(arr_labels_val, p_tmp)
-            row_score[f"a={a:.1f}"] = auc_
-        alpha_scores_list.append(row_score)
-
-    df_cv_alpha = pd.DataFrame(alpha_scores_list)
-    os.makedirs("result", exist_ok=True)
-    cv_alpha_csv = f"result/{prefix}_cv_alpha_scores.csv"
-    df_cv_alpha.to_csv(cv_alpha_csv, index=False)
-    print(f"[INFO] CV alpha scores per fold CSV -> {cv_alpha_csv}")
-
-    make_plots_for_cv_alpha(df_cv_alpha, prefix=prefix)
     print("[INFO] OOF completed.")
 
     arr_labels = oof_labels
@@ -130,8 +109,6 @@ def main():
             best_alpha_score=score_
             best_alpha=a
 
-    df_alpha_map = pd.DataFrame([{"alpha":k,"AUC":v} for k,v in alpha_score_map.items()])
-    df_alpha_map.to_csv(f"result/{prefix}_oof_alpha_AUC_map.csv", index=False)
     print(f"[INFO] best alpha by AUC: alpha={best_alpha}, AUC={best_alpha_score:.4f}")
 
     p_ens_oof = best_alpha*oof_probs_t + (1-best_alpha)*oof_probs_rf
@@ -140,17 +117,12 @@ def main():
     var_min, var_max = v_ens_oof.min(), v_ens_oof.max()
     thr_candidates = np.linspace(var_min, var_max, 10)
     best_thr, best_thr_score = var_min, -999.0
-    thr_score_map={}
     for thr_ in thr_candidates:
         s_ = get_threshold_score(arr_labels, p_ens_oof, v_ens_oof, thr_)
-        thr_score_map[thr_] = s_
         if s_>best_thr_score:
             best_thr_score=s_
             best_thr=thr_
-
-    df_thr_map = pd.DataFrame([{"threshold":k,"uncer+cer_auc":v} for k,v in thr_score_map.items()])
-    df_thr_map.to_csv(f"result/{prefix}_oof_threshold_score.csv", index=False)
-    print(f"[INFO] best threshold={best_thr:.4f}, score={best_thr_score:.4f}")
+    print(f"[INFO] best threshold={best_thr:.4f}, (Unc+Cer)AUC={best_thr_score:.4f}")
 
     ds_train_all = SequenceSNPDataset(X_3d_train, y_train)
     loader_train_all = torch.utils.data.DataLoader(ds_train_all, batch_size=32, shuffle=True)
@@ -164,7 +136,9 @@ def main():
     ds_test = SequenceSNPDataset(X_3d_test, y_test)
     loader_test = torch.utils.data.DataLoader(ds_test, batch_size=32, shuffle=False)
     test_labels_t, _, test_probs_t, test_vars_t = evaluate_model_mc(final_model_t, loader_test, device, mc_passes=mc_passes)
+
     test_probs_rf= rf_final.predict_proba(X_flat_test)[:,1]
+    import numpy
     tree_probas_test = np.array([tree.predict_proba(X_flat_test)[:,1] for tree in rf_final.estimators_])
     test_vars_rf = np.var(tree_probas_test, axis=0)
 
@@ -185,6 +159,8 @@ def main():
 
     test_preds_ens= (test_ens_prob>=0.5).astype(int)
     n_total= len(y_test)
+
+    from evaluation import calc_basic_metrics, confusion_detail
     all_m = calc_basic_metrics(y_test, test_preds_ens, test_ens_prob)
     all_cm= confusion_detail(y_test, test_preds_ens)
 
@@ -228,13 +204,13 @@ def main():
     df_details.to_csv(detail_csv, index=False, encoding='utf-8-sig')
 
     sum_rows=[]
-    def add_sum(name_,n_,pct_,m_,cm_):
+    def add_sum(name_, n_, pct_, metrics_, cm_):
         r_= {"Group":name_,"N":n_,"Pct":pct_}
-        r_.update(m_)
+        r_.update(metrics_)
         r_.update(cm_)
         return r_
 
-    s_all= add_sum("All",n_total,100.0,all_m,all_cm)
+    s_all= add_sum("All", n_total,100.0,all_m,all_cm)
     s_unc= add_sum("Uncertain",n_unc,pct_unc,unc_m,unc_cm)
     s_cer= add_sum("Certain",n_cer,pct_cer,cer_m,cer_cm)
     df_sum= pd.DataFrame([s_all,s_unc,s_cer])
@@ -243,6 +219,8 @@ def main():
 
     print(f"[INFO] test details -> {detail_csv}")
     print(f"[INFO] test summary -> {sum_csv}")
+
+    from evaluation import make_plots_for_test
     make_plots_for_test(df_details, prefix=prefix)
 
 if __name__=="__main__":
