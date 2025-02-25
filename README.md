@@ -1,4 +1,4 @@
-# MC-Dropout + RandomForest SNP Classification
+# Uncertainty-Aware Genomic Classification of Alzheimer’s Disease
 
 This repository demonstrates how to combine a Transformer model with MC-Dropout and RandomForest, then use OOF-based ensemble weighting by maximizing AUC, and thresholding variance to split into Uncertain/Certain groups.
 
