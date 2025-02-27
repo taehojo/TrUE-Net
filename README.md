@@ -5,7 +5,7 @@ This repository demonstrates how to implement TrUE-Net (Transformer-based, Uncer
 ## Folder Structure
 
 ```
-JoLab-uncertainty/
+TrUE-Net/
 ├── README.md
 ├── requirements.txt
 ├── data/
