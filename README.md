@@ -1,6 +1,6 @@
 # Uncertainty-Aware Genomic Classification of Alzheimer’s Disease
 
-This repository demonstrates how to combine a Transformer model with MC-Dropout and RandomForest, then use OOF-based ensemble weighting by maximizing AUC, and thresholding variance to split into Uncertain/Certain groups.
+This repository demonstrates how to implement TrUE-Net (Transformer-based, Uncertainty-aware Ensemble Network) by combining a Transformer model with MC-Dropout and a RandomForest classifier. We use out-of-fold (OOF) predictions to derive an ensemble weight that maximizes AUC, and then apply variance thresholding to split samples into Uncertain and Certain groups.
 
 ## Folder Structure
 
