@@ -89,7 +89,7 @@ def make_plots_for_test(df_details, prefix="myprefix"):
     y_cer = df_cer["true_label"].values
     p_cer = df_cer["final_prob"].values
 
-    from .evaluation import calc_basic_metrics
+    #from .evaluation import calc_basic_metrics
     def get_metrics(y_true, p_prob):
         prd = (p_prob>=0.5).astype(int)
         return calc_basic_metrics(y_true, prd, p_prob)
