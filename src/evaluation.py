@@ -39,9 +39,33 @@ def calc_basic_metrics(labels, preds, probs):
 
 def confusion_detail(labels, preds):
     from sklearn.metrics import confusion_matrix
+    import numpy as np
+    
+    labels = np.array(labels)
+    preds = np.array(preds)
+    
+    if len(labels) == 0 or len(preds) == 0:
+        return {"TN":0, "FP":0, "FN":0, "TP":0}
+    
+    unique_labels = np.unique(labels)
+    unique_preds = np.unique(preds)
+    
+    if len(unique_labels) < 2 or len(unique_preds) < 2:
+        if len(unique_labels) == 1 and len(unique_preds) == 1:
+            if unique_labels[0] == 1 and unique_preds[0] == 1:
+                return {"TN":0, "FP":0, "FN":0, "TP":len(labels)}
+            elif unique_labels[0] == 0 and unique_preds[0] == 0:
+                return {"TN":len(labels), "FP":0, "FN":0, "TP":0}
+            else:
+                if unique_labels[0] == 1:
+                    return {"TN":0, "FP":0, "FN":len(labels), "TP":0}
+                else:
+                    return {"TN":0, "FP":len(labels), "FN":0, "TP":0}
+        return {"TN":0, "FP":0, "FN":0, "TP":0}
+    
     cm = confusion_matrix(labels, preds)
     tn, fp, fn, tp = cm.ravel()
-    return {"TN":tn,"FP":fp,"FN":fn,"TP":tp}
+    return {"TN":tn, "FP":fp, "FN":fn, "TP":tp}
 
 def get_subgroup_metrics(labels, probs, var_, threshold):
     labels = np.array(labels)
@@ -79,7 +103,6 @@ def make_plots_for_test(df_details, prefix="myprefix"):
     df_unc = df_all[df_all["group_uncertain_or_certain"]=="Uncertain"]
     df_cer = df_all[df_all["group_uncertain_or_certain"]=="Certain"]
 
-    # y/p for All, Unc, Cer
     y_all = df_all["true_label"].values
     p_all = df_all["final_prob"].values
 
@@ -89,7 +112,6 @@ def make_plots_for_test(df_details, prefix="myprefix"):
     y_cer = df_cer["true_label"].values
     p_cer = df_cer["final_prob"].values
 
-    #from .evaluation import calc_basic_metrics
     def get_metrics(y_true, p_prob):
         prd = (p_prob>=0.5).astype(int)
         return calc_basic_metrics(y_true, prd, p_prob)
@@ -100,7 +122,6 @@ def make_plots_for_test(df_details, prefix="myprefix"):
 
     fig_list = []
 
-    # 1) KDE of final probabilities
     fig_kde, ax_kde = plt.subplots(figsize=(6,6))
     color_unc = "#b3cde3"
     color_cer = "#005b96"
@@ -115,7 +136,6 @@ def make_plots_for_test(df_details, prefix="myprefix"):
     ax_kde.grid(alpha=0.4)
     fig_list.append(fig_kde)
 
-    # 2) Bar chart for ACC, AUC, F1
     fig_bar, ax_bar = plt.subplots(figsize=(6,6))
     metric_names = ["ACC","AUC","F1"]
     group_labels = ["Uncertain","All","Certain"]
@@ -138,7 +158,6 @@ def make_plots_for_test(df_details, prefix="myprefix"):
     ax_bar.grid(alpha=0.4)
     fig_list.append(fig_bar)
 
-    # 3) Scatter plot (final_prob vs final_var)
     fig_scatter, ax_scatter = plt.subplots(figsize=(6,6))
     df_unc_scatter = df_unc.copy()
     df_cer_scatter = df_cer.copy()
