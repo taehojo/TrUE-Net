@@ -177,4 +177,4 @@ def make_plots_for_test(df_details, prefix="myprefix"):
             pdf.savefig(f)
 
     plt.close('all')
-    print(f"*** _analysis_plots.pdf created with KDE, Bar, and Scatter only. ***")
+    print(f"pdf created.")

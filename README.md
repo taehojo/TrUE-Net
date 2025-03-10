@@ -46,13 +46,11 @@ python src/main.py data/APOE_50kb-1050.raw data/DX-1050.txt apoe-run
 
 It will create outputs in the `result/` folder, such as:
 
-- `_oof_alpha_AUC_map.csv`: alpha vs AUC on entire OOF
-- `_oof_threshold_score.csv`: thresholds vs (Uncertain AUC + Certain AUC)
 - `_test_details.csv`, `_test_summary.csv`: final test metrics (All/Uncertain/Certain)
 - `_analysis_plots.pdf`: final test plots
 
 ## License
-This code is maintained by the **Taeho Jo AI Research Lab** at [Indiana University School of Medicine](https://medicine.iu.edu).  
+This code is maintained by the **Taeho Jo AI Research Lab** at Indiana University School of Medicine.  
 For more information, visit our lab website: [JoLab.AI](https://www.jolab.ai).
 
 All Rights Reserved © 2025 Taeho Jo AI Research Lab 
