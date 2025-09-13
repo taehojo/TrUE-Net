@@ -153,3 +153,6 @@ If you use TrUE-Net in your research, please cite:
   year={2025}
 }
 ```
+
+## License
+© Dr. Jo's Medical AI Research lab, IUSM | www.jolab.ai
