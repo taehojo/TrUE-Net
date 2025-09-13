@@ -5,7 +5,8 @@ from torch.utils.data import Dataset
 
 def load_data(raw_file, dx_file):
     raw_data = pd.read_csv(raw_file, sep=None, engine='python', encoding='utf-8-sig')
-    dx_data  = pd.read_csv(dx_file, header=0, engine='python', encoding='utf-8-sig', sep='\n')
+    # Fix: Remove sep='\n' which causes error
+    dx_data  = pd.read_csv(dx_file, header=0, encoding='utf-8-sig')
     raw_data = raw_data.drop(columns=['FID','IID','PAT','MAT','SEX','PHENOTYPE'], errors='ignore')
     dx_data.columns = dx_data.columns.str.strip()
     if 'New_Label' not in dx_data.columns:
