@@ -3,11 +3,14 @@
 [![Web Demo](https://img.shields.io/badge/Web%20Demo-Available-brightgreen)](https://www.jolab.ai/truenet)
 [![Python](https://img.shields.io/badge/Python-3.12.9-blue)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.7.1-orange)](https://pytorch.org/)
-[![License](https://img.shields.io/badge/License-All%20Rights%20Reserved-red)]()
 
 This repository contains the implementation of **TrUE-Net** (**Tr**ansformer-based, **U**ncertainty-aware **E**nsemble **Net**work), a deep learning framework that combines transformer models with Monte Carlo Dropout for uncertainty-aware genomic classification of Alzheimer's Disease.
 
-## 🌟 Key Features
+## Live Demo
+
+Try our interactive web demo: **[www.jolab.ai/truenet](https://www.jolab.ai/truenet)**
+
+## Key Features
 
 - **Uncertainty Quantification**: Monte Carlo Dropout for prediction reliability assessment
 - **Selective Classification**: Identifies certain (24.6%) vs uncertain (75.4%) predictions
@@ -15,19 +18,7 @@ This repository contains the implementation of **TrUE-Net** (**Tr**ansformer-bas
 - **Comprehensive Baseline Comparison**: Validated against 11 ML models with statistical testing
 - **Real Genomic Data**: APOE 50kb region (14,094 SNPs, 1,050 samples)
 
-## 🚀 Live Demo
-
-Try our interactive web demo: **[www.jolab.ai/truenet](https://www.jolab.ai/truenet)**
-
-## 📊 Performance Summary
-
-| Model Subset | n | Accuracy | F1-Score | Coverage |
-|--------------|---|----------|----------|----------|
-| TrUE-Net (All) | 525 | 65.1% ± 3.9% | 0.668 ± 0.045 | 100% |
-| TrUE-Net (Uncertain) | 396 | 62.6% ± 4.7% | 0.584 ± 0.061 | 75.4% |
-| TrUE-Net (Certain) | 129 | **72.9% ± 7.8%** | **0.821 ± 0.059** | 24.6% |
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 TrUE-Net/
@@ -54,7 +45,7 @@ TrUE-Net/
     └── Table2_Academic_Clean_NoAdaBoost.txt # Final results table
 ```
 
-## 🛠️ Environment Setup
+## Environment Setup
 
 ### System Requirements
 - **CPU**: Intel Xeon or equivalent (128GB RAM recommended)
@@ -88,7 +79,7 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-## 🔬 Reproducing Results
+## Reproducing Results
 
 ### 1. Run TrUE-Net Experiment
 ```bash
@@ -116,7 +107,7 @@ This generates:
 python src/run_statistical_validation.py
 ```
 
-## 📈 Baseline Models Included
+## Baseline Models Included
 
 **Ensemble Methods** (3):
 - Gradient Boosting
@@ -135,7 +126,7 @@ python src/run_statistical_validation.py
 - Decision Tree
 - Neural Network (MLP)
 
-## 📊 Key Results
+## Key Results
 
 ### McNemar's Test Results
 TrUE-Net significantly outperforms (p<0.05):
@@ -150,17 +141,7 @@ Comparable performance with:
 - Random Forest (p=0.193)
 - XGBoost (p=0.113)
 
-## 🌐 Web Application
-
-Visit our interactive demo at **[www.jolab.ai/truenet](https://www.jolab.ai/truenet)**
-
-Features:
-- Upload genomic data
-- Real-time uncertainty visualization
-- Interactive threshold adjustment
-- Download predictions with confidence scores
-
-## 📝 Citation
+## Citation
 
 If you use TrUE-Net in your research, please cite:
 
@@ -172,31 +153,3 @@ If you use TrUE-Net in your research, please cite:
   year={2025}
 }
 ```
-
-## 📄 License
-
-This code is maintained by the **Taeho Jo AI Research Lab** at Indiana University School of Medicine.
-
-For more information, visit:
-- Lab Website: [www.jolab.ai](https://www.jolab.ai)
-- TrUE-Net Demo: [www.jolab.ai/truenet](https://www.jolab.ai/truenet)
-
-All Rights Reserved © 2025 Taeho Jo AI Research Lab
-
-## 📧 Contact
-
-For questions or collaborations:
-- Principal Investigator: Taeho Jo, PhD
-- Email: tjo@iu.edu
-- Lab: Indiana University School of Medicine
-
-## 🙏 Acknowledgments
-
-This research was supported by:
-- Alzheimer's Disease Sequencing Project (ADSP)
-- Indiana University School of Medicine
-- NIH/NIA grants (specific grant numbers to be added)
-
----
-
-**Note**: This repository contains the code for reproducing the main results. The full ADSP genomic data requires approved access through dbGaP.
